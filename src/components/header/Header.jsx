@@ -4,8 +4,15 @@ import Card from "../card/Card";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [updateCategory, setUpdateCategory] = useState(null);
+
+  const handleAddUserClick = () => {
+    setUpdateCategory(null);
+    setOpen(true);
+  };
+
   return (
-    <nav className="bg-gray-800 p-2 shadow-md ">
+    <nav className="bg-gray-800 p-2 shadow-md">
       <div className="container mx-auto flex p-2 items-center justify-between">
         <div className="text-white text-xl font-bold">Admin Panel</div>
 
@@ -17,7 +24,7 @@ const Header = () => {
 
         <div className="flex items-center space-x-2">
           <button
-            onClick={() => setOpen((p) => !p)}
+            onClick={handleAddUserClick}
             className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200"
           >
             Add Users
@@ -49,10 +56,21 @@ const Header = () => {
         <a className="block text-gray-300 hover:text-white py-1">Users</a>
         <a className="block text-gray-300 hover:text-white py-1">Settings</a>
       </div>
-      <div className="flex items-start gap-5 justify-start ">
-        <Form open={open} setOpen={setOpen} />
+
+      <div className="flex items-start gap-5 justify-start">
+        <Form
+          open={open}
+          setOpen={setOpen}
+          setUpdateCategory={setUpdateCategory}
+          updateCategory={updateCategory}
+        />
         <div className="flex gap-4 flex-wrap">
-          <Card />
+          <Card
+            open={open}
+            setOpen={setOpen}
+            setUpdateCategory={setUpdateCategory}
+            updateCategory={updateCategory}
+          />
         </div>
       </div>
     </nav>

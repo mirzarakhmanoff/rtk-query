@@ -39,4 +39,5 @@ export const {
   useGetCategoryQuery,
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
 } = userApi;

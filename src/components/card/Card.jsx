@@ -4,13 +4,10 @@ import {
   useGetCategoryQuery,
   useDeleteCategoryMutation,
 } from "../context/api/category-api";
-import { useDispatch, useSelector } from "react-redux";
-import { setData } from "../redux/user-slice";
 
-const Card = () => {
+const Card = ({ open, setOpen, setUpdateCategory }) => {
   const { data, error, isLoading } = useGetCategoryQuery();
   const [deleteCategory] = useDeleteCategoryMutation();
-  const [edit, setEdit] = useState(false);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -24,10 +21,10 @@ const Card = () => {
       .catch((err) => console.error("Failed to delete category:", err));
   };
 
-  const handleEdit = (id) => {
-    console.log("Edit clicked for ID:", id);
-    setEdit((p) => !p);
-    console.log(edit);
+  const handleEdit = (user) => {
+    console.log("Edit clicked for ID:", user.id);
+    setUpdateCategory(user);
+    setOpen(true);
   };
 
   return (
@@ -39,7 +36,7 @@ const Card = () => {
         >
           <div className="absolute top-2 right-2 flex gap-2">
             <button
-              onClick={() => handleEdit(user.id)}
+              onClick={() => handleEdit(user)}
               className="text-blue-500 hover:text-blue-700"
             >
               <FaEdit />

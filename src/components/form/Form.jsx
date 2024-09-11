@@ -1,19 +1,35 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { add } from "../redux/user-slice";
-import { useCreateCategoryMutation } from "../context/api/category-api";
+import {
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+} from "../context/api/category-api";
 
-const Form = ({ open, setOpen }) => {
-  const [createUser, { data }] = useCreateCategoryMutation();
+const Form = ({ open, setOpen, setUpdateCategory, updateCategory }) => {
+  const [createUser] = useCreateCategoryMutation();
+  const [updateCategoryMutation] = useUpdateCategoryMutation();
+
   const handleCreateBlog = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    console.log(data);
     createUser(data)
       .unwrap()
       .then(() => {
         e.target.reset();
+        setOpen(false);
+      });
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    updateCategoryMutation({ id: updateCategory.id, body: data })
+      .unwrap()
+      .then(() => {
+        setOpen(false);
       });
   };
 
@@ -24,7 +40,10 @@ const Form = ({ open, setOpen }) => {
           open ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
         } transform transition-all duration-500 ease-in-out justify-center items-start w-ful bg-white p-6 rounded-lg shadow-md m-4`}
       >
-        <form onSubmit={handleCreateBlog} className="w-[600px]">
+        <form
+          onSubmit={updateCategory ? handleUpdate : handleCreateBlog}
+          className="w-[600px]"
+        >
           <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
             Personal Information
           </h2>
@@ -37,6 +56,7 @@ const Form = ({ open, setOpen }) => {
               Your Name
             </label>
             <input
+              defaultValue={updateCategory?.fname}
               type="text"
               name="fname"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -51,6 +71,7 @@ const Form = ({ open, setOpen }) => {
               Your Surname
             </label>
             <input
+              defaultValue={updateCategory?.lname}
               type="text"
               name="lname"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -65,6 +86,7 @@ const Form = ({ open, setOpen }) => {
               Your Job
             </label>
             <input
+              defaultValue={updateCategory?.job}
               type="text"
               name="job"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -79,6 +101,7 @@ const Form = ({ open, setOpen }) => {
               Gender
             </label>
             <select
+              defaultValue={updateCategory?.gender}
               name="gender"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -96,6 +119,7 @@ const Form = ({ open, setOpen }) => {
               Your Bio
             </label>
             <textarea
+              defaultValue={updateCategory?.bio}
               name="bio"
               rows="4"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
